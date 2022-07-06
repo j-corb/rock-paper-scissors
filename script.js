@@ -1,6 +1,7 @@
 function computerPlay() {
     let compMove = '';
     let i = Math.floor(Math.random() * 3) +1;
+    //generate random number between 1 and 3
     if (i === 1) {
         compMove = 'Rock';
     } else if (i === 2) {
