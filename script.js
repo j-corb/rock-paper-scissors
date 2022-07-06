@@ -12,13 +12,14 @@ function computerPlay() {
     return compMove.toLowerCase();
 }
 
-function playerSelection() {
-    playerMove = prompt('Please make your choice').toLowerCase();
-    return playerMove;
-}
+//function playerSelection() {
+ //   playerMove = prompt('Please make your choice').toLowerCase();
+ //   return playerMove;
+//}
 
 function playRound (comp, choice) {
     let outcome = '';
+
     if (comp === 'rock' && choice === 'paper') {
         outcome = 'Paper beats rock. You win!!!';
     } else if (comp === 'rock' && choice === 'rock') {
@@ -38,33 +39,67 @@ function playRound (comp, choice) {
     } else if (comp === 'scissors' && choice === 'paper') {
         outcome = 'Scisors beats paper... You lose :(';
     }
-    return outcome;
+    gameCounter(outcome);
+    result.textContent = outcome;
+    result.setAttribute('style', 'color: yellow; background: red;')
+    container.appendChild(result);
+    console.log(outcome)
 }
 
-function game () {
-    let human = 0;
-    let computer = 0;
-    //could increase the counter to allow smt like 9 games but put an if condition to stop when human or comp = 5
-    for (let i=0; i<9; i++) {
-        if (human === 5 || computer === 5) {
-            break
+function gameCounter(outcome) {
+   
+    if (outcome.includes("You win")) {
+        human++
+    } else if (outcome.includes("You lose")) {
+        computer++
+    }
+    update.textContent = `You: ${human}\n Computer: ${computer}`;
+    container.appendChild(update)
+    if (human === 5 || computer === 5) {
+        if (human > computer) {
+            final.textContent = 'The human has won';
+            container.appendChild(final);
+            rock.disabled=true;
+            paper.disabled=true;
+            scissors.disabled=true;
+            const refresh = document.createElement('button');
+            refresh.textContent = 'Play Again';
+            container.appendChild(refresh);
+            refresh.addEventListener('click', reload);
+        } else {
+            final.textContent = 'The computer has won';
+            container.appendChild(final);
+            rock.disabled=true;
+            paper.disabled=true;
+            scissors.disabled=true;
+            const refresh = document.createElement('button');
+            refresh.textContent = 'Play Again';
+            container.appendChild(refresh);
+            refresh.addEventListener('click', reload);
+            
         }
-        outcome = playRound(computerPlay(), playerSelection())
-      if (outcome.includes("You win")) {
-        human++;
-      } else if (outcome.includes("You lose")) {
-        computer++;
-      } else {
-        i--;
-      }
-    console.log(outcome)
-    console.log(`You: ${human}\n Computer: ${computer}`)
-    }
-    if (human > computer) {
-        console.log("Congratulations, you have beaten the machine.");
-    } else if (computer > human) {
-        console.log("The machines have won.")
-    } else {
-        console.log("Man and machine are equal.")
-    }
+    } 
 }
+
+function reload() {
+    document.location.reload();
+}
+
+let human = 0;
+let computer = 0;
+
+const update = document.createElement('div');
+const final = document.createElement('div');
+
+const container = document.querySelector('#container');
+const result = document.createElement('div');
+
+const rock = document.querySelector('#rock');
+const paper = document.querySelector('#paper');
+const scissors = document.querySelector('#scissors');
+
+rock.addEventListener('click', () => {playRound(computerPlay(), 'rock')});
+paper.addEventListener('click', () => {playRound(computerPlay(), 'paper')});
+scissors.addEventListener('click', () => {playRound(computerPlay(), 'scissors')});
+
+
